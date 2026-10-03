@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TripTide — Find Your Forecast Window</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,500;9..144,600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="masthead">
+        <a class="brand" href="#" aria-label="TripTide home">
+          <span class="brand-mark" aria-hidden="true">T</span>
+          <span>TRIPTIDE <span class="brand-divider">/</span> GO WITH THE FORECAST</span>
+        </a>
+        <span class="masthead-note">Good trips have a little sky sense.</span>
+      </header>
+
+      <section class="intro-grid">
+        <div class="intro-copy">
+          <p class="eyebrow">A forecast for your getaway</p>
+          <h1>Pick your trip.<br /><em>Catch a wave.</em></h1>
+          <p class="intro-text">
+            Choose a destination and trip length. We’ll find the forecast
+            windows that look most inviting for your kind of escape.
+          </p>
+          <form id="searchForm" class="search-bar">
+            <label class="sr-only" for="cityInput">Search a trip destination</label>
+            <span class="search-pin" aria-hidden="true">⌖</span>
+            <input
+              id="cityInput"
+              type="text"
+              placeholder="Where do you want to go?"
+              autocomplete="off"
+            />
+            <button type="submit">Explore</button>
+          </form>
+          <div class="location-row">
+            <p id="statusMessage" class="status-message" aria-live="polite"></p>
+            <button id="locateBtn" class="location-button" type="button">
+              <span aria-hidden="true">◎</span> Use my location
+            </button>
+          </div>
+        </div>
+        <div class="sky-card">
+          <div class="sky-card-top">
+            <span class="sky-label">YOUR DESTINATION</span>
+            <span class="live-indicator"><span></span> LIVE SKY</span>
+          </div>
+          <div class="sky-place">
+            <p id="cityName" class="city-name">Loading…</p>
+            <p id="dateText" class="date-text"></p>
+          </div>
+          <div class="sky-reading">
+            <div id="weatherIcon" class="weather-icon" aria-hidden="true">☀️</div>
+            <div>
+              <p id="currentTemp" class="temp">--°C</p>
+              <p id="currentDesc" class="description">Waiting for forecast…</p>
+            </div>
+          </div>
+          <div class="sky-stats">
+            <div><span>Feels like</span><strong id="feelsLike">--°C</strong></div>
+            <div><span>Humidity</span><strong id="humidity">--%</strong></div>
+            <div><span>Wind</span><strong id="wind">-- km/h</strong></div>
+            <div><span>Rain today</span><strong id="rainChance">--%</strong></div>
+          </div>
+          <div class="sky-orbit orbit-one"></div>
+          <div class="sky-orbit orbit-two"></div>
+        </div>
+      </section>
+
+      <section class="card planner-card">
+        <div class="planner-intro">
+          <div class="planner-title">
+            <p class="eyebrow">Your trip, weather-wise</p>
+            <h2>When should<br /><em>you go?</em></h2>
+            <p>Pick your trip vibe and how many days. We’ll compare the best departure dates.</p>
+          </div>
+          <div class="planner-controls">
+            <label class="activity-picker">
+              <span>TRIP VIBE</span>
+              <select id="activitySelect" aria-label="Choose a trip vibe">
+                <option value="walk">City exploring</option>
+                <option value="cycling">Active outdoors</option>
+                <option value="picnic">Slow &amp; sunny</option>
+              </select>
+            </label>
+            <label class="activity-picker">
+              <span>TRIP LENGTH</span>
+              <select id="durationSelect" aria-label="Choose trip length in days">
+                <option value="1">Quick day out · 1 day</option>
+                <option value="2" selected>Weekend escape · 2 days</option>
+                <option value="3">Long weekend · 3 days</option>
+                <option value="5">Mini break · 5 days</option>
+                <option value="7">A whole week · 7 days</option>
+                <option value="10">Long escape · 10 days</option>
+              </select>
+            </label>
+          </div>
+        </div>
+        <p class="planner-explanation">
+          We compare the forecast across each possible trip, not just departure day.
+          Comfort scores are planning hints—not guarantees. Longer-range forecasts can change.
+        </p>
+        <p id="plannerStatus" class="planner-status" aria-live="polite">
+          Loading getaway dates…
+        </p>
+        <div id="plannerList" class="planner-list"></div>
+        <section id="aiBrief" class="ai-brief" aria-labelledby="aiBriefTitle" hidden>
+          <div class="ai-brief-top">
+            <div>
+              <p class="ai-kicker">YOUR LITTLE TRIP SIDEKICK · GEMINI</p>
+              <h3 id="aiBriefTitle">Should you plan this trip?</h3>
+              <p class="ai-description">Get a simple yes or no and an estimated confidence.</p>
+            </div>
+            <button id="aiBriefButton" class="ai-brief-button" type="button">
+              <span aria-hidden="true">✦</span> Ask Gemini
+            </button>
+          </div>
+          <p id="aiBriefStatus" class="ai-brief-status" aria-live="polite"></p>
+          <div id="aiBriefResult" class="ai-brief-result" aria-live="polite" hidden></div>
+          <form id="aiQuestionForm" class="ai-question-form">
+            <label class="ai-question-label" for="aiQuestionInput">Ask about this trip</label>
+            <div class="ai-question-controls">
+              <input
+                id="aiQuestionInput"
+                name="question"
+                type="search"
+                maxlength="300"
+                placeholder="e.g. Is rain likely during my trip?"
+                autocomplete="off"
+                required
+              >
+              <button id="aiQuestionButton" class="ai-question-button" type="submit">Ask</button>
+            </div>
+            <p id="aiQuestionStatus" class="ai-question-status" aria-live="polite"></p>
+          </form>
+        </section>
+        <div id="planAdvice" class="plan-advice" aria-live="polite" hidden></div>
+      </section>
+
+      <footer class="outlook-section">
+        <div class="outlook-heading">
+          <div>
+            <p class="eyebrow">A postcard from the forecast</p>
+            <h2>Destination conditions</h2>
+          </div>
+          <p>Coming days · temperatures in °C</p>
+        </div>
+        <div id="forecastList" class="forecast-list"></div>
+        <p class="footer-note">Forecast data by Open-Meteo · Plans are yours; this is just a helpful nudge.</p>
+      </footer>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>
